@@ -1,4 +1,5 @@
 import { createDomain } from "effector";
+import { attachLogger } from "effector-logger/attach";
 export interface TodoItem {
   id: string;
   name: string;
@@ -6,14 +7,21 @@ export interface TodoItem {
 }
 
 const todoDomain = createDomain("todo-domain");
-export const addingItem = todoDomain.createEvent<string>();
-export const itemCompleted = todoDomain.createEvent<TodoItem>();
-export const itemRemoved = todoDomain.createEvent<TodoItem>();
+attachLogger(todoDomain, {
+  reduxDevtools: "enabled",
+  console: "enabled",
+});
+export const addingItem = todoDomain.createEvent<string>("add-item");
+export const itemCompleted = todoDomain.createEvent<TodoItem>("complete-item");
+export const itemRemoved = todoDomain.createEvent<TodoItem>("remove-item");
 export const $todo = todoDomain
-  .createStore<{ lastId: number; items: Array<TodoItem> }>({
-    lastId: 0,
-    items: [],
-  })
+  .createStore<{ lastId: number; items: Array<TodoItem> }>(
+    {
+      lastId: 0,
+      items: [],
+    },
+    { name: "todo-store" }
+  )
   .on(addingItem, ({ lastId, items }, payload) => ({
     lastId: lastId + 1,
     items: [

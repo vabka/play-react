@@ -8,8 +8,9 @@ import { Route, Switch } from "react-router";
 
 import TodoListActivity from "./activities/todo-list-activity";
 import AppActivity from "./activities/app-activity";
-
+import reset from "styled-reset";
 const GlobalStyles = createGlobalStyle`
+  ${reset}
   body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
